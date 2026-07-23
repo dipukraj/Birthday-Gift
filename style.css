@@ -333,6 +333,29 @@ body {
     font-weight: 300;
 }
 
+/* Glowing text styling for birthday & belated messages */
+.birthday-text-glow {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    width: 100%;
+    color: var(--accent-gold-glow);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 5px rgba(255, 215, 0, 0.3);
+    animation: pulseGlow 1.5s ease-in-out infinite alternate, floatName 4s ease-in-out infinite;
+    padding: 1rem;
+}
+
+.birthday-text-glow.belated {
+    color: var(--text-primary);
+    text-shadow: 0 0 15px rgba(255, 71, 126, 0.55), 0 0 5px rgba(157, 78, 221, 0.35);
+    background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: floatName 4s ease-in-out infinite;
+}
+
 /* Floating background bubbles */
 .floating-bubble {
     position: absolute;

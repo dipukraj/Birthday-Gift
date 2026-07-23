@@ -381,15 +381,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------------
     // Prerana's birthday is 21st July. Let's calculate the countdown for July 21, 2026.
     // Her birth year is 2003, turning 23.
-    const birthdayTarget = new Date('July 21, 2026 00:00:00').getTime();
+    const birthdayStart = new Date('July 21, 2026 00:00:00').getTime();
+    const birthdayEnd = new Date('July 22, 2026 00:00:00').getTime();
 
     function updateCountdown() {
         const now = new Date().getTime();
-        const difference = birthdayTarget - now;
 
-        // If the date is past 21 July 2026 or it is the actual day
-        if (difference <= 0) {
-            // Update UI to Birthday Greeting mode!
+        // 1. On the Birthday (July 21, 2026)
+        if (now >= birthdayStart && now < birthdayEnd) {
             document.querySelector('.countdown-title').innerHTML = "✨ Today is the Day! ✨";
             document.querySelector('.timer').innerHTML = `
                 <div class="birthday-text-glow">
@@ -402,7 +401,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return;
         }
+        
+        // 2. After the Birthday (July 22, 2026 onwards)
+        if (now >= birthdayEnd) {
+            document.querySelector('.countdown-title').innerHTML = "✨ Hope You Had a Wonderful Birthday! ✨";
+            document.querySelector('.timer').innerHTML = `
+                <div class="birthday-text-glow belated">
+                    BELATED HAPPY 23rd BIRTHDAY PRERANA PRITAM! 💖🎉
+                </div>
+            `;
+            // Trigger slow ambient confetti falling from top occasionally
+            if (Math.random() < 0.03) {
+                triggerConfettiBurst(Math.random() * window.innerWidth, -10, 3, false);
+            }
+            return;
+        }
 
+        // 3. Before the Birthday (Show Countdown)
+        const difference = birthdayStart - now;
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
