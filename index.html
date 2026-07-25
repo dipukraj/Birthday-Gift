@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Prerana Pritam! ✨</title>
+    <title>Magic in the Making... ✨</title>
     <!-- Google Fonts for premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,337 +13,72 @@
         rel="stylesheet">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="maintenance.css?v=2">
 </head>
 
 <body>
-    <!-- Canvas for background star glitter and cursor trails -->
-    <canvas id="glitter-canvas"></canvas>
-    <!-- Canvas for confetti explosion -->
-    <canvas id="confetti-canvas"></canvas>
-    <!-- Canvas for Fireworks celebration -->
-    <canvas id="fireworks-canvas"></canvas>
-    <!-- Container for floating celebration balloons -->
-    <div id="balloons-container"></div>
+    <!-- Canvas for floating particles/stars background -->
+    <canvas id="particles-canvas"></canvas>
 
-    <!-- Music Control Float -->
-    <button id="music-toggle" class="music-btn hidden" aria-label="Toggle Music">
-        <i class="fas fa-music"></i>
-    </button>
-
-    <!-- Splash Screen (Autoplay Music Unlock) -->
-    <div id="splash-screen" class="splash-overlay">
-        <div class="splash-card">
-            <h1 class="splash-title">A Special Surprise Awaits...</h1>
-            <p class="splash-subtitle">Dedicated to someone very special</p>
-            <div class="gift-box-glow">
-                <i class="fas fa-gift splash-gift-icon"></i>
-            </div>
-            <button id="unlock-btn" class="unlock-button">Unlock Surprise ✨</button>
-        </div>
-    </div>
-
-    <!-- Main Container -->
-    <div id="main-content" class="main-container blurred">
-        <!-- Hero Section -->
-        <header class="hero-section">
-            <div class="floating-bubble bubble-1"></div>
-            <div class="floating-bubble bubble-2"></div>
-            <div class="floating-bubble bubble-3"></div>
-
-            <div class="hero-content">
-                <p class="pre-title">Happy Birthday</p>
-                <h1 class="animated-name">Prerana Pritam</h1>
-                <p class="post-title">Born on July 21, 2003 🌟</p>
-
-                <!-- Countdown Container -->
-                <div id="countdown-container" class="countdown-card">
-                    <h3 class="countdown-title">Countdown to the Big Day! 🎁</h3>
-                    <div class="timer">
-                        <div class="time-block">
-                            <span id="days">00</span>
-                            <label>Days</label>
-                        </div>
-                        <div class="time-block">
-                            <span id="hours">00</span>
-                            <label>Hours</label>
-                        </div>
-                        <div class="time-block">
-                            <span id="minutes">00</span>
-                            <label>Min</label>
-                        </div>
-                        <div class="time-block">
-                            <span id="seconds">00</span>
-                            <label>Sec</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Glassmorphic Maintenance Card Container -->
+    <main class="maintenance-container">
+        <header class="icon-box">
+            <i class="fas fa-magic glow-icon"></i>
+            <span class="magic-sparkles"><i class="fas fa-star"></i></span>
         </header>
 
-        <!-- Cake & Candle Blowing Section -->
-        <section class="section-card cake-section">
-            <h2 class="section-title">Blow the Candles! 🎂</h2>
-            <p class="section-desc">Make a wish, and click or tap the candles to blow them out!</p>
+        <section class="text-content">
+            <p class="pre-title">For Prerana Pritam</p>
+            <h1 class="title">Magic in the Making... ✨</h1>
 
-            <div class="cake-container">
-                <div class="cake">
-                    <div class="candle-container">
-                        <div class="candle" id="candle-1">
-                            <div class="flame"></div>
-                        </div>
-                        <div class="candle" id="candle-2">
-                            <div class="flame"></div>
-                        </div>
-                        <div class="candle" id="candle-3">
-                            <div class="flame"></div>
-                        </div>
-                    </div>
-                    <div class="plate"></div>
-                    <div class="layer layer-bottom"></div>
-                    <div class="layer layer-middle"></div>
-                    <div class="layer layer-top"></div>
-                    <div class="icing"></div>
-                    <div class="drips"></div>
-                </div>
-            </div>
-
-            <p id="cake-instruction" class="cake-hint">Click the flames to blow them out!</p>
-        </section>
-
-        <!-- Greeting Card Envelope Section -->
-        <section class="section-card envelope-section">
-            <h2 class="section-title">A Message for You ✉️</h2>
-            <p class="section-desc">Click on the envelope to open a heartfelt letter.</p>
-
-            <div class="envelope-wrapper">
-                <div class="envelope" id="envelope">
-                    <div class="front flap"></div>
-                    <div class="front pocket"></div>
-                    <div class="letter" id="letter">
-                        <div class="letter-text">
-                            <h3>Dearest Prerana Pritam,</h3>
-                            <p>Wishing you the happiest and most magical 23rd Birthday! 🎉</p>
-                            <p>On this beautiful day (July 21st, 2026), I wanted to send you something extra special.
-                                You are a wonderful person who brings so much light, positive vibes, and joy to the
-                                world.</p>
-                            <p>May this new chapter of your life be filled with stars, laughter, success, and beautiful
-                                surprises. Keep shining bright like you always do, and may all your dreams come true! ✨
-                            </p>
-                            <p class="signature">With love and best wishes, ❤️</p>
-                        </div>
-                    </div>
-                    <div class="hearts">
-                        <div class="heart h-1"></div>
-                        <div class="heart h-2"></div>
-                        <div class="heart h-3"></div>
-                    </div>
-                </div>
+            <div class="message-box">
+                <p class="message-text">
+                    कभी-कभी हम किसी के लिए पूरे दिल से कुछ बनाते हैं, अपना समय देते हैं, अपनी मेहनत लगाते हैं, अपनी
+                    भावनाएँ जोड़ देते हैं। लेकिन जब सामने वाला उसकी अहमियत ही न समझ पाए, तो धीरे-धीरे उस चीज़ का महत्व
+                    भी खत्म होने लगता है।
+                </p>
+                <p class="message-text">
+                    यह बर्थडे वेबसाइट मैंने सिर्फ़ कोड लिखकर नहीं बनाई थी। इसके हर पेज, हर डिज़ाइन और हर छोटे-बड़े
+                    हिस्से में मेरी मेहनत के साथ मेरी भावनाएँ भी जुड़ी थीं। इसे बनाने में मैंने कई रातें जागकर बिताई
+                    थीं, सिर्फ़ इसलिए कि जिसे यह वेबसाइट मिले, उसके चेहरे पर एक मुस्कान आ जाए।
+                </p>
+                <p class="message-text">
+                    लेकिन शायद हर किसी के लिए भावनाओं की कीमत एक जैसी नहीं होती। जब सामने वाले को उसमें कोई दिलचस्पी ही
+                    न हो, तो फिर इतनी मेहनत और इतने एहसासों का क्या मतलब रह जाता है।
+                </p>
+                <p class="message-text highlight-text">
+                    इसलिए आज मैं इस वेबसाइट को हमेशा के लिए बंद कर रहा हूँ।
+                </p>
+                <p class="message-text">
+                    कोई शिकायत नहीं, कोई गिला नहीं… बस इतना समझ आ गया कि हर मेहनत की कद्र हर किसी को नहीं होती।
+                </p>
+                <p class="message-text">
+                    शायद अब इस वेबसाइट की कोई वैल्यू नहीं रही, लेकिन इसे बनाते समय जो एहसास थे, वे हमेशा मेरे साथ
+                    रहेंगे।
+                </p>
+                <span class="hindi-text">💖</span>
             </div>
         </section>
 
-        <!-- Polaroid Memory Lane Section -->
-        <section class="section-card memory-section">
-            <h2 class="section-title">Moments & Wishes 📸</h2>
-            <p class="section-desc">A gallery of dreamy vibes captured just for you.</p>
-
-            <div class="polaroid-grid">
-                <div class="polaroid-card item-1">
-                    <div class="polaroid-img-wrapper">
-                        <img src="images/gift.png" alt="A Luxury Gift Box">
-                    </div>
-                    <div class="polaroid-caption">For beautiful moments...</div>
-                </div>
-                <div class="polaroid-card item-2">
-                    <div class="polaroid-img-wrapper">
-                        <img src="images/flowers.png" alt="Pastel Roses Bouquet">
-                    </div>
-                    <div class="polaroid-caption">...filled with smiles...</div>
-                </div>
-                <div class="polaroid-card item-3">
-                    <div class="polaroid-img-wrapper">
-                        <img src="images/sky.png" alt="Starry Cosmic Sky">
-                    </div>
-                    <div class="polaroid-caption">...and endless dreams!</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Interactive Gift Reveal Game Section -->
-        <section class="section-card gifts-section">
-            <h2 class="section-title">Pick Your Birthday Gift! 🎁</h2>
-            <p class="section-desc">Click on a gift box to reveal your birthday blessing.</p>
-
-            <div class="gifts-grid">
-                <div class="gift-item" id="gift-box-1">
-                    <div class="gift-box">
-                        <div class="gift-box-lid"></div>
-                        <div class="gift-box-body">
-                            <span class="gift-label">1</span>
-                        </div>
-                    </div>
-                    <div class="gift-message-reveal hidden">
-                        <p>✨ <strong>Dreams Come True!</strong><br>May this year bring you closer to your dreams and
-                            fill your life with success and happiness!</p>
-                    </div>
-                </div>
-
-                <div class="gift-item" id="gift-box-2">
-                    <div class="gift-box">
-                        <div class="gift-box-lid"></div>
-                        <div class="gift-box-body">
-                            <span class="gift-label">2</span>
-                        </div>
-                    </div>
-                    <div class="gift-message-reveal hidden">
-                        <p>🌟 <strong>Infinite Smiles!</strong><br>May you laugh louder and smile brighter every single
-                            day this year!</p>
-                    </div>
-                </div>
-
-                <div class="gift-item" id="gift-box-3">
-                    <div class="gift-box">
-                        <div class="gift-box-lid"></div>
-                        <div class="gift-box-body">
-                            <span class="gift-label">3</span>
-                        </div>
-                    </div>
-                    <div class="gift-message-reveal hidden">
-                        <p>✨ <strong>Good Vibe Shield!</strong><br>May you be surrounded only by positive, loving, and
-                            supportive energy!</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Reasons Why You Are Special Section -->
-            <section class="section-card reasons-section">
-                <h2 class="section-title">Reasons You Are Special 💖</h2>
-                <p class="section-desc">Tap on any heart to reveal a sweet message!</p>
-
-                <div class="reasons-grid">
-                    <div class="reason-card" data-reason="1">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>✨ Your contagious smile that lights up any room!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reason-card" data-reason="2">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>🌟 Your kind heart and how deeply you care for others!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reason-card" data-reason="3">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>🌸 Your positive energy that turns bad days into good ones!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reason-card" data-reason="4">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>🎨 Your creativity and unique perspective on life!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reason-card" data-reason="5">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>👑 You are truly 1 in a million and irreplaceable!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reason-card" data-reason="6">
-                        <div class="reason-inner">
-                            <div class="reason-front">
-                                <i class="fas fa-heart heart-icon"></i>
-                                <span>Tap Me!</span>
-                            </div>
-                            <div class="reason-back">
-                                <p>🎁 Your ability to make everyone feel loved and cherished!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Birthday Trivia Quiz Section -->
-            <section class="section-card quiz-section">
-                <h2 class="section-title">How Well Do You Know Prerana? 🧩</h2>
-                <p class="section-desc">Take a quick 3-question birthday quiz!</p>
-
-                <div id="quiz-container" class="quiz-card">
-                    <div class="quiz-header">
-                        <span id="quiz-progress">Question 1 of 3</span>
-                        <span id="quiz-score-badge">Score: <strong id="quiz-score">0</strong></span>
-                    </div>
-
-                    <div id="quiz-question-box" class="quiz-question-box">
-                        <h3 id="quiz-question-text">Loading question...</h3>
-                        <div id="quiz-options" class="quiz-options-grid">
-                            <!-- Options will be populated dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- Secret Reward Unlocked Card (Hidden by default) -->
-                    <div id="quiz-reward" class="quiz-reward-card hidden">
-                        <div class="reward-icon"><i class="fas fa-trophy"></i></div>
-                        <h3>Quiz Master! 🎉</h3>
-                        <p id="quiz-final-msg">You scored 3/3! Here is your Super Secret Birthday Blessing:</p>
-                        <div class="secret-blessing-box">
-                            <p>💌 <em>"May your 23rd year bring infinite joy, dream achievements, perfect health, and
-                                    unending happiness!"</em></p>
-                        </div>
-                        <button id="retry-quiz-btn" class="retry-btn">Play Again 🔄</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="site-footer">
-                <p>Made with ✨ and ❤️ for Prerana Pritam</p>
-                <p>&copy; 2026 Birthday Celebration</p>
-            </footer>
-    </div>
-
-    <!-- Photo Lightbox Modal -->
-    <div id="lightbox-modal" class="lightbox-modal hidden">
-        <div class="lightbox-content">
-            <span id="lightbox-close" class="lightbox-close">&times;</span>
-            <img id="lightbox-img" src="" alt="Enlarged Polaroid Photo">
-            <p id="lightbox-caption" class="lightbox-caption"></p>
+        <!-- Dynamic progress visual indicator -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
         </div>
-    </div>
 
-    <!-- Script references -->
-    <script src="script.js"></script>
+        <!-- Interactive CTA -->
+        <button id="heart-btn" class="action-btn" aria-label="Send Love">
+            <i class="fas fa-heart"></i>
+            <span>Send Love</span>
+        </button>
+    </main>
+
+    <!-- Secret door to preview the birthday website -->
+    <!-- Note: Make sure the original index.html is renamed to birthday.html when using maintenance mode -->
+    <button id="secret-door" class="secret-trigger" title="Access Birthday Page" aria-label="Bypass maintenance mode">
+        <i class="fas fa-key"></i>
+    </button>
+
+    <script src="maintenance.js"></script>
 </body>
 
 </html>
