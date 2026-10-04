@@ -1,4 +1,4 @@
-// JS Functionality for Happy Birthday Prerana Pritam Website
+// JS Functionality for Happy Birthday Sana Khan Website
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------------
@@ -379,55 +379,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------------
     // COUNTDOWN CALCULATOR
     // -----------------------------------------------------------------
-    // Prerana's birthday is 21st July. Let's calculate the countdown for July 21, 2026.
-    // Her birth year is 2003, turning 23.
-    const birthdayStart = new Date('July 21, 2026 00:00:00').getTime();
-    const birthdayEnd = new Date('July 22, 2026 00:00:00').getTime();
+    // Sana Khan was born on October 27, 2004.
+    const birthYear = 2004;
 
     function updateCountdown() {
         const now = new Date().getTime();
+        const currentYear = new Date().getFullYear();
+        const thisYearStart = new Date(`October 27, ${currentYear} 00:00:00`).getTime();
+        const thisYearEnd = new Date(`October 28, ${currentYear} 00:00:00`).getTime();
+        const ageThisYear = currentYear - birthYear;
 
-        // 1. On the Birthday (July 21, 2026)
-        if (now >= birthdayStart && now < birthdayEnd) {
-            document.querySelector('.countdown-title').innerHTML = "✨ Today is the Day! ✨";
-            document.querySelector('.timer').innerHTML = `
-                <div class="birthday-text-glow">
-                    HAPPY 23rd BIRTHDAY PRERANA PRITAM! 🎉🍰
-                </div>
-            `;
+        // 1. On the Birthday (Today is October 27)
+        if (now >= thisYearStart && now < thisYearEnd) {
+            const titleEl = document.querySelector('.countdown-title');
+            if (titleEl) titleEl.innerHTML = "✨ Today is the Big Day! ✨";
+            const timerEl = document.querySelector('.timer');
+            if (timerEl) {
+                timerEl.innerHTML = `
+                    <div class="birthday-text-glow">
+                        HAPPY ${ageThisYear}th BIRTHDAY SANA KHAN! 🎉🎂
+                    </div>
+                `;
+            }
             // Trigger slow ambient confetti falling from top
             if (Math.random() < 0.05) {
                 triggerConfettiBurst(Math.random() * window.innerWidth, -10, 5, false);
             }
             return;
         }
-        
-        // 2. After the Birthday (July 22, 2026 onwards)
-        if (now >= birthdayEnd) {
-            document.querySelector('.countdown-title').innerHTML = "✨ Hope You Had a Wonderful Birthday! ✨";
-            document.querySelector('.timer').innerHTML = `
-                <div class="birthday-text-glow belated">
-                    BELATED HAPPY 23rd BIRTHDAY PRERANA PRITAM! 💖🎉
-                </div>
-            `;
-            // Trigger slow ambient confetti falling from top occasionally
-            if (Math.random() < 0.03) {
-                triggerConfettiBurst(Math.random() * window.innerWidth, -10, 3, false);
-            }
-            return;
+
+        // 2. Countdown to upcoming birthday (this year or next year if passed)
+        let targetDate = thisYearStart;
+        if (now >= thisYearEnd) {
+            targetDate = new Date(`October 27, ${currentYear + 1} 00:00:00`).getTime();
         }
 
-        // 3. Before the Birthday (Show Countdown)
-        const difference = birthdayStart - now;
+        const difference = targetDate - now;
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        daysEl.innerText = String(days).padStart(2, '0');
-        hoursEl.innerText = String(hours).padStart(2, '0');
-        minutesEl.innerText = String(minutes).padStart(2, '0');
-        secondsEl.innerText = String(seconds).padStart(2, '0');
+        if (daysEl) daysEl.innerText = String(days).padStart(2, '0');
+        if (hoursEl) hoursEl.innerText = String(hours).padStart(2, '0');
+        if (minutesEl) minutesEl.innerText = String(minutes).padStart(2, '0');
+        if (secondsEl) secondsEl.innerText = String(seconds).padStart(2, '0');
     }
 
     updateCountdown();
@@ -817,18 +813,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------------
     const quizData = [
         {
-            question: "1. When is Prerana Pritam's Special Birthday? 📅",
-            options: ["July 21st", "August 15th", "June 10th", "December 25th"],
+            question: "1. When is Sana Khan's Special Birthday? 📅",
+            options: ["October 27th", "November 14th", "August 20th", "December 5th"],
             correct: 0
         },
         {
-            question: "2. What best describes Prerana's vibe? ✨",
-            options: ["Pure Joy & Positive Energy", "Always Sleepy", "Grumpy", "Quiet & Shy"],
+            question: "2. What best describes Sana's personality? ✨",
+            options: ["Kind, Graceful & A Genuine Friend", "Always Complaining", "Dramatic", "Loud & Bossy"],
             correct: 0
         },
         {
-            question: "3. What is the ultimate Birthday Wish for her 23rd year? 🎁",
-            options: ["Endless Smiles, Success & Happiness!", "Only 1 slice of cake", "A pet dragon", "No gifts"],
+            question: "3. What is the ultimate heartfelt wish for her 22nd year? 🎁",
+            options: ["Health, Peace, Barakah & Tremendous Success!", "A 100-page assignment", "Only cold pizza", "Zero birthday gifts"],
             correct: 0
         }
     ];
