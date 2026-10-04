@@ -200,30 +200,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -----------------------------------------------------------------
-    // GLITTER PARTICLES CANVAS TRAIL
+    // GLITTER PARTICLES CANVAS TRAIL (Optimized for 60/120fps)
     // -----------------------------------------------------------------
     const glitterCanvas = document.getElementById('glitter-canvas');
     const glitterCtx = glitterCanvas.getContext('2d');
     let sparkles = [];
+    const MAX_SPARKLES = 40;
 
     function resizeGlitterCanvas() {
-        glitterCanvas.width = window.innerWidth;
-        glitterCanvas.height = window.innerHeight;
+        if (glitterCanvas.width !== window.innerWidth || glitterCanvas.height !== window.innerHeight) {
+            glitterCanvas.width = window.innerWidth;
+            glitterCanvas.height = window.innerHeight;
+        }
     }
     resizeGlitterCanvas();
-    window.addEventListener('resize', resizeGlitterCanvas);
 
     class Sparkle {
         constructor(x, y) {
             this.x = x;
             this.y = y;
-            this.size = Math.random() * 4 + 1;
-            this.speedX = Math.random() * 2 - 1;
-            this.speedY = Math.random() * -1.5 - 0.5;
+            this.size = Math.random() * 3.5 + 1.2;
+            this.speedX = (Math.random() * 2 - 1) * 0.8;
+            this.speedY = (Math.random() * -1.5 - 0.4) * 0.8;
             this.opacity = 1;
-            this.fadeSpeed = Math.random() * 0.015 + 0.01;
+            this.fadeSpeed = Math.random() * 0.02 + 0.015;
             // Palette matches the rose gold / gold theme
-            const colors = ['#ffd700', '#ff477e', '#d4af37', '#e2c15c', '#c8963e', '#ffffff'];
+            const colors = ['#ffd700', '#ff477e', '#d4af37', '#e2c15c', '#ffffff'];
             this.color = colors[Math.floor(Math.random() * colors.length)];
         }
 
@@ -231,103 +233,111 @@ document.addEventListener('DOMContentLoaded', () => {
             this.x += this.speedX;
             this.y += this.speedY;
             this.opacity -= this.fadeSpeed;
-            if (this.size > 0.2) this.size -= 0.05;
+            if (this.size > 0.3) this.size -= 0.04;
         }
 
         draw() {
-            glitterCtx.save();
-            glitterCtx.globalAlpha = this.opacity;
+            glitterCtx.globalAlpha = Math.max(0, this.opacity);
             glitterCtx.fillStyle = this.color;
-            glitterCtx.shadowBlur = 8;
-            glitterCtx.shadowColor = this.color;
 
-            // Draw star shape
+            // Fast star diamond shape without expensive software shadowBlur
+            const s = this.size;
             glitterCtx.beginPath();
-            glitterCtx.moveTo(this.x, this.y - this.size);
-            glitterCtx.lineTo(this.x + this.size * 0.3, this.y - this.size * 0.3);
-            glitterCtx.lineTo(this.x + this.size, this.y);
-            glitterCtx.lineTo(this.x + this.size * 0.3, this.y + this.size * 0.3);
-            glitterCtx.lineTo(this.x, this.y + this.size);
-            glitterCtx.lineTo(this.x - this.size * 0.3, this.y + this.size * 0.3);
-            glitterCtx.lineTo(this.x - this.size, this.y);
-            glitterCtx.lineTo(this.x - this.size * 0.3, this.y - this.size * 0.3);
+            glitterCtx.moveTo(this.x, this.y - s);
+            glitterCtx.lineTo(this.x + s * 0.3, this.y - s * 0.3);
+            glitterCtx.lineTo(this.x + s, this.y);
+            glitterCtx.lineTo(this.x + s * 0.3, this.y + s * 0.3);
+            glitterCtx.lineTo(this.x, this.y + s);
+            glitterCtx.lineTo(this.x - s * 0.3, this.y + s * 0.3);
+            glitterCtx.lineTo(this.x - s, this.y);
+            glitterCtx.lineTo(this.x - s * 0.3, this.y - s * 0.3);
             glitterCtx.closePath();
-
             glitterCtx.fill();
-            glitterCtx.restore();
         }
     }
 
+    let lastPointerTime = 0;
     function handlePointerMove(e) {
         if (!isUnlocked) return;
+        const now = performance.now();
+        if (now - lastPointerTime < 32) return; // Throttle to ~30fps max spawn rate
+        lastPointerTime = now;
+
         const x = e.clientX || (e.touches && e.touches[0].clientX);
         const y = e.clientY || (e.touches && e.touches[0].clientY);
-        if (x !== undefined && y !== undefined) {
-            for (let i = 0; i < 3; i++) {
-                sparkles.push(new Sparkle(x, y));
-            }
+        if (x !== undefined && y !== undefined && sparkles.length < MAX_SPARKLES) {
+            sparkles.push(new Sparkle(x, y));
         }
     }
 
-    window.addEventListener('mousemove', handlePointerMove);
-    window.addEventListener('touchmove', handlePointerMove);
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('touchmove', handlePointerMove, { passive: true });
 
     // Dynamic drifting background stars
     function spawnBackgroundSparkle() {
-        if (!isUnlocked) return;
+        if (!isUnlocked || sparkles.length >= MAX_SPARKLES) return;
         const x = Math.random() * glitterCanvas.width;
         const y = Math.random() * glitterCanvas.height;
         sparkles.push(new Sparkle(x, y));
     }
-    setInterval(spawnBackgroundSparkle, 180);
+    setInterval(spawnBackgroundSparkle, 260);
 
     function animateGlitter() {
         glitterCtx.clearRect(0, 0, glitterCanvas.width, glitterCanvas.height);
 
-        for (let i = 0; i < sparkles.length; i++) {
-            sparkles[i].update();
-            sparkles[i].draw();
+        if (sparkles.length > 0) {
+            glitterCtx.save();
+            glitterCtx.globalCompositeOperation = 'lighter'; // GPU-accelerated glowing blend
 
-            if (sparkles[i].opacity <= 0) {
-                sparkles.splice(i, 1);
-                i--;
+            for (let i = 0; i < sparkles.length; i++) {
+                sparkles[i].update();
+                sparkles[i].draw();
+
+                if (sparkles[i].opacity <= 0) {
+                    sparkles.splice(i, 1);
+                    i--;
+                }
             }
+            glitterCtx.restore();
         }
+
         requestAnimationFrame(animateGlitter);
     }
     animateGlitter();
 
     // -----------------------------------------------------------------
-    // CONFETTI EXPLOSION CANVAS
+    // CONFETTI EXPLOSION CANVAS (On-Demand Loop - 0% Idle Cost)
     // -----------------------------------------------------------------
     const confettiCanvas = document.getElementById('confetti-canvas');
     const confettiCtx = confettiCanvas.getContext('2d');
     let confettiArray = [];
+    let confettiAnimationId = null;
 
     function resizeConfettiCanvas() {
-        confettiCanvas.width = window.innerWidth;
-        confettiCanvas.height = window.innerHeight;
+        if (confettiCanvas.width !== window.innerWidth || confettiCanvas.height !== window.innerHeight) {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
     }
     resizeConfettiCanvas();
-    window.addEventListener('resize', resizeConfettiCanvas);
 
     class Confetti {
         constructor(x, y, isVelocitySpout = false) {
             this.x = x;
             this.y = y;
-            this.size = Math.random() * 8 + 6;
+            this.size = Math.random() * 7 + 5;
             this.color = ['#f72585', '#b5179e', '#7209b7', '#4cc9f0', '#ffd700', '#ff477e'][Math.floor(Math.random() * 6)];
             this.rotation = Math.random() * 360;
             this.rotationSpeed = Math.random() * 6 - 3;
 
             if (isVelocitySpout) {
                 // Spout up (like an explosion source)
-                this.speedX = Math.random() * 10 - 5;
-                this.speedY = Math.random() * -12 - 5;
+                this.speedX = Math.random() * 8 - 4;
+                this.speedY = Math.random() * -10 - 4;
             } else {
                 // Natural sky float
-                this.speedX = Math.random() * 4 - 2;
-                this.speedY = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 4 + 2;
             }
 
             this.gravity = 0.22;
@@ -354,9 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function triggerConfettiBurst(x, y, count = 60, isSpout = true) {
-        for (let i = 0; i < count; i++) {
+    function triggerConfettiBurst(x, y, count = 45, isSpout = true) {
+        if (confettiArray.length > 120) return; // Prevent excessive particle accumulation
+        const safeCount = Math.min(count, 50);
+        for (let i = 0; i < safeCount; i++) {
             confettiArray.push(new Confetti(x, y, isSpout));
+        }
+        if (!confettiAnimationId) {
+            confettiAnimationId = requestAnimationFrame(animateConfetti);
         }
     }
 
@@ -372,9 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 i--;
             }
         }
-        requestAnimationFrame(animateConfetti);
+
+        if (confettiArray.length > 0) {
+            confettiAnimationId = requestAnimationFrame(animateConfetti);
+        } else {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiAnimationId = null;
+        }
     }
-    animateConfetti();
 
     // -----------------------------------------------------------------
     // COUNTDOWN CALCULATOR
@@ -530,20 +550,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -----------------------------------------------------------------
-    // FIREWORKS CANVAS ENGINE
+    // FIREWORKS CANVAS ENGINE (On-Demand Loop - 0% Idle Cost)
     // -----------------------------------------------------------------
     const fireworksCanvas = document.getElementById('fireworks-canvas');
-    const fireworksCtx = fireworksCanvas.getContext('2d');
+    const fireworksCtx = fireworksCanvas ? fireworksCanvas.getContext('2d') : null;
     let fireworksRockets = [];
     let fireworksParticles = [];
+    let fireworksAnimationId = null;
 
     function resizeFireworksCanvas() {
         if (!fireworksCanvas) return;
-        fireworksCanvas.width = window.innerWidth;
-        fireworksCanvas.height = window.innerHeight;
+        if (fireworksCanvas.width !== window.innerWidth || fireworksCanvas.height !== window.innerHeight) {
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+        }
     }
     resizeFireworksCanvas();
-    window.addEventListener('resize', resizeFireworksCanvas);
+
+    // Central debounced resize handler for all canvases
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            resizeGlitterCanvas();
+            resizeConfettiCanvas();
+            resizeFireworksCanvas();
+        }, 150);
+    }, { passive: true });
 
     class FireworkRocket {
         constructor(startX, targetX, targetY) {
@@ -571,12 +604,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         draw() {
-            fireworksCtx.save();
             fireworksCtx.fillStyle = this.color;
             fireworksCtx.beginPath();
-            fireworksCtx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+            fireworksCtx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
             fireworksCtx.fill();
-            fireworksCtx.restore();
         }
     }
 
@@ -586,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.y = y;
             this.color = color;
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 6 + 2;
+            const speed = Math.random() * 5 + 1.5;
             this.vx = Math.cos(angle) * speed;
             this.vy = Math.sin(angle) * speed;
             this.gravity = 0.08;
@@ -606,40 +637,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         draw() {
-            fireworksCtx.save();
-            fireworksCtx.globalAlpha = this.alpha;
+            fireworksCtx.globalAlpha = Math.max(0, this.alpha);
             fireworksCtx.fillStyle = this.color;
-            fireworksCtx.shadowBlur = 10;
-            fireworksCtx.shadowColor = this.color;
             fireworksCtx.beginPath();
-            fireworksCtx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+            fireworksCtx.arc(this.x, this.y, 2.2, 0, Math.PI * 2);
             fireworksCtx.fill();
-            fireworksCtx.restore();
         }
     }
 
     function explodeFirework(x, y, color) {
-        const particleCount = 40;
+        const particleCount = 30;
         for (let i = 0; i < particleCount; i++) {
             fireworksParticles.push(new FireworkParticle(x, y, color));
         }
         playCelebrationChime();
+        startFireworksLoop();
+    }
+
+    function startFireworksLoop() {
+        if (!fireworksAnimationId && fireworksCanvas) {
+            fireworksAnimationId = requestAnimationFrame(animateFireworks);
+        }
     }
 
     function triggerFireworks() {
-        const count = 5;
+        const count = 4;
         for (let i = 0; i < count; i++) {
             setTimeout(() => {
+                if (!fireworksCanvas) return;
                 const startX = Math.random() * (window.innerWidth * 0.6) + window.innerWidth * 0.2;
                 const targetX = Math.random() * (window.innerWidth * 0.8) + window.innerWidth * 0.1;
-                const targetY = Math.random() * (window.innerHeight * 0.4) + window.innerHeight * 0.1;
+                const targetY = Math.random() * (window.innerHeight * 0.35) + window.innerHeight * 0.1;
                 fireworksRockets.push(new FireworkRocket(startX, targetX, targetY));
-            }, i * 350);
+                startFireworksLoop();
+            }, i * 320);
         }
     }
 
     function animateFireworks() {
+        if (!fireworksCanvas) return;
         fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+        fireworksCtx.save();
+        fireworksCtx.globalCompositeOperation = 'lighter'; // GPU glowing effect without CPU shadow blur
 
         fireworksRockets = fireworksRockets.filter(r => {
             const alive = r.update();
@@ -653,9 +693,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return alive;
         });
 
-        requestAnimationFrame(animateFireworks);
+        fireworksCtx.restore();
+
+        if (fireworksRockets.length > 0 || fireworksParticles.length > 0) {
+            fireworksAnimationId = requestAnimationFrame(animateFireworks);
+        } else {
+            fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+            fireworksAnimationId = null;
+        }
     }
-    animateFireworks();
 
     // -----------------------------------------------------------------
     // FLOATING BALLOONS LAUNCHER
@@ -663,24 +709,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const balloonsContainer = document.getElementById('balloons-container');
     const balloonColors = ['#ff477e', '#ffd700', '#7209b7', '#4cc9f0', '#ff0055', '#2ecc71', '#ff9f43'];
 
-    function spawnBalloons(count = 10) {
+    function spawnBalloons(count = 8) {
         if (!balloonsContainer) return;
-        for (let i = 0; i < count; i++) {
+        const safeCount = Math.min(count, 10);
+        for (let i = 0; i < safeCount; i++) {
             setTimeout(() => {
                 const balloon = document.createElement('div');
                 balloon.className = 'balloon';
                 const color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
                 balloon.style.background = `radial-gradient(circle at 30% 30%, #fff, ${color} 60%, #300)`;
-                balloon.style.left = `${Math.random() * 90 + 5}vw`;
-                balloon.style.animationDuration = `${Math.random() * 4 + 6}s`;
-                balloon.style.animationDelay = `${Math.random() * 2}s`;
+                balloon.style.left = `${Math.random() * 88 + 6}vw`;
+                const duration = Math.random() * 3 + 7;
+                balloon.style.animationDuration = `${duration}s`;
+                balloon.style.animationDelay = `${Math.random() * 1.5}s`;
                 balloonsContainer.appendChild(balloon);
 
-                // Remove balloon after float animation ends
-                setTimeout(() => {
+                // Auto-cleanup on animation finish to prevent memory leaks
+                balloon.addEventListener('animationend', () => {
                     balloon.remove();
-                }, 11000);
-            }, i * 400);
+                }, { once: true });
+                // Fallback cleanup
+                setTimeout(() => {
+                    if (balloon.parentNode) balloon.remove();
+                }, (duration + 3) * 1000);
+            }, i * 350);
         }
     }
 
@@ -739,7 +791,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -----------------------------------------------------------------
-    // POLAROID 3D PARALLAX TILT & LIGHTBOX MODAL
+    // POLAROID 3D PARALLAX TILT & LIGHTBOX MODAL (RAF Throttled)
     // -----------------------------------------------------------------
     const polaroidCards = document.querySelectorAll('.polaroid-card');
     const lightboxModal = document.getElementById('lightbox-modal');
@@ -748,19 +800,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxClose = document.getElementById('lightbox-close');
 
     polaroidCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -12;
-            const rotateY = ((x - centerX) / centerX) * 12;
+        let cardRect = null;
+        let isTicking = false;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04, 1.04, 1.04)`;
+        card.addEventListener('mouseenter', () => {
+            cardRect = card.getBoundingClientRect();
         });
 
+        card.addEventListener('mousemove', (e) => {
+            if (!cardRect) cardRect = card.getBoundingClientRect();
+            if (!isTicking) {
+                requestAnimationFrame(() => {
+                    if (!cardRect) return;
+                    const x = e.clientX - cardRect.left;
+                    const y = e.clientY - cardRect.top;
+                    const centerX = cardRect.width / 2;
+                    const centerY = cardRect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
+                    isTicking = false;
+                });
+                isTicking = true;
+            }
+        }, { passive: true });
+
         card.addEventListener('mouseleave', () => {
+            cardRect = null;
             card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
         });
 
