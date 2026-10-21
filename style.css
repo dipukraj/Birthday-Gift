@@ -815,6 +815,18 @@ body {
     transform: rotate(-2deg);
 }
 
+.polaroid-card.item-4 {
+    transform: rotate(3deg);
+}
+
+.polaroid-card.item-5 {
+    transform: rotate(-3deg) translateY(-6px);
+}
+
+.polaroid-card.item-6 {
+    transform: rotate(2deg);
+}
+
 .polaroid-card:hover {
     transform: rotate(0deg) scale(1.1) translateY(-15px);
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
