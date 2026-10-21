@@ -857,6 +857,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Birthday Frame Modal Zoom
+    const birthdayFrameContainer = document.getElementById('birthday-frame-container');
+    if (birthdayFrameContainer && lightboxModal) {
+        birthdayFrameContainer.addEventListener('click', () => {
+            const frameImg = document.getElementById('birthday-frame-img');
+            if (frameImg) {
+                lightboxImg.src = frameImg.src;
+                lightboxCaption.innerText = 'Through The Years (2019 — 2026) ✨ A Beautiful Journey';
+                lightboxModal.classList.remove('hidden');
+                if (typeof playCelebrationChime === 'function') {
+                    playCelebrationChime();
+                }
+            }
+        });
+    }
+
     // -----------------------------------------------------------------
     // REASONS WHY YOU ARE SPECIAL CARDS
     // -----------------------------------------------------------------
