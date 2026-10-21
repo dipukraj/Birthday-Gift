@@ -1809,3 +1809,206 @@ body {
         opacity: 0;
     }
 }
+
+/* ==========================================================================
+   Interactive Glowing Lantern Earrings Section
+   ========================================================================== */
+.earring-section {
+    position: relative;
+    background: radial-gradient(circle at 50% 25%, rgba(255, 170, 0, 0.12) 0%, rgba(30, 10, 52, 0.6) 60%, rgba(15, 6, 28, 0.75) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45), inset 0 0 35px rgba(255, 170, 0, 0.06);
+    overflow: hidden;
+}
+
+.earring-showcase-wrapper {
+    max-width: 520px;
+    margin: 2rem auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.earring-display-card {
+    position: relative;
+    border-radius: 22px;
+    padding: 10px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+    border: 2px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.1);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease, border-color 0.5s ease;
+    width: 100%;
+    max-width: 380px;
+}
+
+.earring-display-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(255, 170, 0, 0.6);
+}
+
+.earring-img-container {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #110520;
+}
+
+.earring-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+}
+
+.earring-img-off {
+    transition: filter 0.5s ease;
+}
+
+.earring-img-on {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+/* When the lantern is LIT */
+.earring-display-card.lit {
+    border-color: #ffb703;
+    box-shadow: 0 0 50px rgba(255, 183, 3, 0.65), 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 90px rgba(255, 107, 139, 0.35);
+    animation: lanternPulseGlow 3s ease-in-out infinite alternate;
+}
+
+.earring-display-card.lit .earring-img-on {
+    opacity: 1;
+}
+
+@keyframes lanternPulseGlow {
+    0% {
+        box-shadow: 0 0 45px rgba(255, 183, 3, 0.55), 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 65px rgba(255, 183, 3, 0.8), 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 100px rgba(255, 107, 139, 0.4);
+    }
+}
+
+.earring-click-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 6, 32, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #fff;
+    border: 1px solid rgba(255, 183, 3, 0.45);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.earring-display-card.lit .earring-click-hint {
+    background: rgba(45, 20, 5, 0.92);
+    border-color: #ffd166;
+    color: #ffd166;
+}
+
+.earring-controls {
+    margin-top: 1.8rem;
+}
+
+.earring-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #ff9e00 100%);
+    border: none;
+    outline: none;
+    color: #1a0826;
+    padding: 0.9rem 2.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(255, 158, 0, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+    font-family: var(--font-body);
+}
+
+.earring-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(255, 158, 0, 0.55), 0 0 25px rgba(255, 209, 102, 0.4);
+}
+
+.earring-btn.active {
+    background: linear-gradient(135deg, #ff5400 0%, #ff0054 100%);
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(255, 0, 84, 0.45);
+}
+
+.lantern-blessing-card {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease, margin-top 0.4s ease;
+    width: 100%;
+}
+
+.lantern-blessing-card.show {
+    max-height: 250px;
+    opacity: 1;
+    margin-top: 1.6rem;
+}
+
+.lantern-blessing-inner {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 183, 3, 0.35);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.lantern-blessing-quote {
+    font-family: var(--font-handwritten);
+    font-size: 1.55rem;
+    color: #ffd166;
+    line-height: 1.5;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.blessing-star {
+    color: #ffd166;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    animation: pulseGlow 1.8s infinite alternate;
+}
+
+@media (max-width: 768px) {
+    .earring-display-card {
+        max-width: 320px;
+    }
+    .earring-btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 0.95rem;
+    }
+    .lantern-blessing-quote {
+        font-size: 1.3rem;
+    }
+}

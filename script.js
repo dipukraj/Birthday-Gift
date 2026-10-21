@@ -993,5 +993,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Quiz
     loadQuizQuestion();
+
+    // -----------------------------------------------------------------
+    // GLOWING LANTERN EARRINGS INTERACTION
+    // -----------------------------------------------------------------
+    const earringCard = document.getElementById('earring-card');
+    const earringToggleBtn = document.getElementById('earring-toggle-btn');
+    const earringBtnText = document.getElementById('earring-btn-text');
+    const earringHintText = document.getElementById('earring-hint-text');
+    const lanternBlessing = document.getElementById('lantern-blessing');
+
+    let isLanternLit = false;
+
+    function toggleLanternEarrings() {
+        isLanternLit = !isLanternLit;
+
+        if (isLanternLit) {
+            if (earringCard) earringCard.classList.add('lit');
+            if (earringToggleBtn) earringToggleBtn.classList.add('active');
+            if (earringBtnText) earringBtnText.innerHTML = 'Lanterns Glowing! ✨ (Click to Turn Off)';
+            if (earringHintText) earringHintText.innerText = 'Click to turn light OFF';
+            if (lanternBlessing) lanternBlessing.classList.add('show');
+
+            if (typeof playCelebrationChime === 'function') {
+                playCelebrationChime();
+            }
+
+            if (earringCard && typeof triggerConfettiBurst === 'function') {
+                const rect = earringCard.getBoundingClientRect();
+                triggerConfettiBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 25, true);
+            }
+        } else {
+            if (earringCard) earringCard.classList.remove('lit');
+            if (earringToggleBtn) earringToggleBtn.classList.remove('active');
+            if (earringBtnText) earringBtnText.innerHTML = 'Light Up The Lanterns 🏮';
+            if (earringHintText) earringHintText.innerText = 'Click anywhere to turn light ON';
+            if (lanternBlessing) lanternBlessing.classList.remove('show');
+        }
+    }
+
+    if (earringCard) {
+        earringCard.addEventListener('click', toggleLanternEarrings);
+    }
+    if (earringToggleBtn) {
+        earringToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLanternEarrings();
+        });
+    }
 });
 
